@@ -276,15 +276,20 @@ class Simulation:
         self.services = generator_factory.createServices()
         self.arrivals.generate()
         self.services.generate()
+        self.filter_negative()
         self.spent_time = []
         self.monitor.agenda.scheduleEvent(EventNotice(self.clock, 0, 'arrival', None))
+
+    def filter_negative(self):
+        self.arrivals.data = [max(0, time) for time in self.arrivals.data]
+        self.services.data = [max(0, time) for time in self.services.data]
     
     def run(self):
         while self.monitor.moreSamples() and self.monitor.moreEvents():
             self.monitor.agenda.getNextEvent()
             self.execute()
             self.monitor.agenda.flushOutEvent()
-        self.show()
+        
     
     def execute(self):
         event_type = self.monitor.agenda.getEventType()
