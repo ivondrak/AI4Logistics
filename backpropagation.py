@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 
@@ -150,3 +151,28 @@ class BackPropagation:
             error = np.max(np.abs(np.array(desired_output) - np.array(predicted_output)))
             max_error = max(max_error, error)
         return max_error  
+    
+    def plot_activations(self):
+        _, (ax1, ax2) = plt.subplots(2, 1)
+        x_input = range(len(self.activations[0]))
+        x_output = range(len(self.activations[-1]))
+        ax1.set_xticks(x_input)
+        ax2.set_xticks(x_output)
+
+        input_activations = self.activations[0].flatten().tolist()
+        output_activations = self.activations[-1].flatten().tolist()
+        input_neurons = range(len(input_activations))
+        output_neurons = range(len(output_activations))
+
+        ax1.bar(input_neurons, input_activations, label='Input Layer')
+        ax1.set_xlabel('Neuron')
+        ax1.set_ylabel('Activation')
+        ax1.set_title('Input Layer Activations')
+
+        ax2.bar(output_neurons, output_activations, label='Output Layer')
+        ax2.set_xlabel('Neuron')
+        ax2.set_ylabel('Activation')
+        ax2.set_title('Output Layer Activations')
+
+        plt.tight_layout()
+        plt.show()
